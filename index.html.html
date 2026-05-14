@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orden de Compra - Nantes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0F4C81;
+            --primary-light: #1565A8;
+            --accent: #FF6B35;
+            --bg-main: #FAFBFC;
+            --bg-card: #FFFFFF;
+            --text-primary: #1A1A1A;
+            --text-secondary: #666666;
+            --border: #E1E4E8;
+            --success: #2DA44E;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Work Sans', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            padding: 2.5rem 2rem;
+            border-radius: 16px 16px 0 0;
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            transform: translate(30%, -30%);
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo {
+            color: white;
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: rgba(255,255,255,0.9);
+            font-size: 1rem;
+            font-weight: 400;
+        }
+
+        .form-card {
+            background: var(--bg-card);
+            padding: 3rem 2.5rem;
+            border-radius: 0 0 16px 16px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .section {
+            margin-bottom: 2.5rem;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-number {
+            background: var(--primary);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-row.full {
+            grid-template-columns: 1fr;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .required {
+            color: var(--accent);
+        }
+
+        input, select, textarea {
+            font-family: 'Work Sans', sans-serif;
+            font-size: 0.95rem;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            background: var(--bg-main);
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(15, 76, 129, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .items-container {
+            background: var(--bg-main);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 2px dashed var(--border);
+            margin-top: 1rem;
+        }
+
+        .item-row {
+            display: grid;
+            grid-template-columns: 3fr 1fr 1fr 1fr auto;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            align-items: end;
+        }
+
+        .item-row input {
+            background: white;
+        }
+
+        .btn-remove {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .btn-remove:hover {
+            background: #c82333;
+            transform: translateY(-1px);
+        }
+
+        .btn-add {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .btn-add:hover {
+            background: #2c974b;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(45, 164, 78, 0.3);
+        }
+
+        .totals {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 2rem;
+            border: 2px solid var(--border);
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .total-row:last-child {
+            border-bottom: none;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+            padding-top: 1rem;
+            margin-top: 0.5rem;
+            border-top: 2px solid var(--primary);
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--accent) 0%, #ff8555 100%);
+            color: white;
+            border: none;
+            padding: 1rem 3rem;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 2rem;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .success-message {
+            background: var(--success);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 500;
+            display: none;
+            margin-top: 1rem;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .oc-number {
+            font-family: 'DM Mono', monospace;
+            font-weight: 500;
+            font-size: 1rem;
+            background: #e3f2fd;
+            border: 2px solid #1976d2;
+            color: #1976d2;
+        }
+
+        .historial-sidebar {
+            position: sticky;
+            top: 2rem;
+        }
+
+        .historial-card {
+            background: var(--bg-card);
+            padding: 1.5rem;
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .historial-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .historial-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .historial-count {
+            background: var(--primary);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .historial-loading {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+        }
+
+        .historial-empty {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .historial-list {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .historial-item {
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            margin-bottom: 0.75rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            background: white;
+        }
+
+        .historial-item:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-sm);
+            transform: translateX(-2px);
+        }
+
+        .historial-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 0.5rem;
+        }
+
+        .historial-oc-number {
+            font-family: 'DM Mono', monospace;
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 0.95rem;
+        }
+
+        .historial-date {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .historial-proveedor {
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+            font-weight: 500;
+        }
+
+        .historial-ot {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .historial-total {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--success);
+            margin-top: 0.5rem;
+        }
+
+        @media (max-width: 1024px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .historial-sidebar {
+                position: static;
+                order: -1;
+            }
+
+            .historial-list {
+                max-height: 400px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem 0.5rem;
+            }
+
+            .header {
+                padding: 2rem 1.5rem;
+            }
+
+            .form-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .item-row {
+                grid-template-columns: 1fr;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+            }
+        }
+
+        .refresh-btn {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .refresh-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main-layout">
+            <div class="form-container">
+                <div class="header">
+                    <div class="header-content">
+                        <div class="logo">NANTES</div>
+                        <div class="subtitle">Orden de Compra</div>
+                    </div>
+                </div>
+
+                <div class="form-card">
+                    <form id="ordenCompraForm">
+                        <div class="section">
+                            <div class="section-title">
+                                <span class="section-number">1</span>
+                                Información General
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>N° de OC <span class="required">*</span></label>
+                                    <input type="text" name="nroOC" id="nroOC" class="oc-number" required readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label>Fecha de Emisión <span class="required">*</span></label>
+                                    <input type="date" name="fechaEmision" id="fechaEmision" required>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>N° de OT (Orden de Trabajo) <span class="required">*</span></label>
+                                    <input type="text" name="nroOT" required placeholder="OT-2024-045">
+                                </div>
+                                <div class="form-group">
+                                    <label>Fecha de Entrega Requerida</label>
+                                    <input type="date" name="fechaEntrega">
+                                </div>
+                            </div>
+
+                            <div class="form-row full">
+                                <div class="form-group">
+                                    <label>Cliente</label>
+                                    <input type="text" name="cliente" placeholder="Nombre del cliente">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">
+                                <span class="section-number">2</span>
+                                Datos del Proveedor
+                            </div>
+                            
+                            <div class="form-row full">
+                                <div class="form-group">
+                                    <label>Razón Social <span class="required">*</span></label>
+                                    <input type="text" name="proveedorNombre" required placeholder="Nombre del proveedor">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">
+                                <span class="section-number">3</span>
+                                Detalle de Items a Comprar
+                            </div>
+
+                            <div class="items-container" id="itemsContainer"></div>
+
+                            <button type="button" class="btn-add" id="btnAgregarItem">
+                                <span>+ Agregar Item</span>
+                            </button>
+                        </div>
+
+                        <div class="totals">
+                            <div class="total-row">
+                                <span>Subtotal:</span>
+                                <span id="subtotal">$0.00</span>
+                            </div>
+                            <div class="total-row">
+                                <span>IVA (21%):</span>
+                                <span id="iva">$0.00</span>
+                            </div>
+                            <div class="total-row">
+                                <span>TOTAL:</span>
+                                <span id="total">$0.00</span>
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">
+                                <span class="section-number">4</span>
+                                Observaciones y Condiciones
+                            </div>
+                            
+                            <div class="form-row full">
+                                <div class="form-group">
+                                    <label>Condiciones de Pago</label>
+                                    <select name="condicionesPago">
+                                        <option value="">Seleccionar</option>
+                                        <option value="contado">Contado</option>
+                                        <option value="30dias">30 días</option>
+                                        <option value="60dias">60 días</option>
+                                        <option value="90dias">90 días</option>
+                                        <option value="50-50">50% anticipo - 50% contra entrega</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-row full">
+                                <div class="form-group">
+                                    <label>Lugar de Entrega</label>
+                                    <input type="text" name="lugarEntrega" placeholder="Dirección de entrega">
+                                </div>
+                            </div>
+
+                            <div class="form-row full">
+                                <div class="form-group">
+                                    <label>Observaciones Adicionales</label>
+                                    <textarea name="observaciones" placeholder="Cualquier información adicional relevante..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="submit-btn">Generar Orden de Compra</button>
+                        <div class="success-message" id="successMessage">
+                            ✓ Orden de Compra guardada exitosamente
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="historial-sidebar">
+                <div class="historial-card">
+                    <div class="historial-header">
+                        <div class="historial-title">Historial de OC</div>
+                        <div class="historial-count" id="historialCount">0</div>
+                    </div>
+                    <button type="button" class="refresh-btn" id="btnActualizar">
+                        🔄 Actualizar
+                    </button>
+                    <div id="historialContent" style="margin-top: 1rem;">
+                        <div class="historial-loading">Cargando historial...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbycjNNU3-h65bRFXOTkrrwYP500LS-e_YAfnwH_NUFV_c1GweBjuSd9p7drXKJxMwcI/exec';
+
+        let ultimoNumeroOC = 0;
+
+        function generarNumeroOC() {
+            const year = new Date().getFullYear();
+            const numero = String(ultimoNumeroOC + 1).padStart(4, '0');
+            return `OC-${year}-${numero}`;
+        }
+
+        function crearItemRow() {
+            const div = document.createElement('div');
+            div.className = 'item-row';
+            div.innerHTML = `
+                <div class="form-group">
+                    <label>Descripción <span class="required">*</span></label>
+                    <input type="text" name="itemDescripcion[]" required placeholder="Ej: Chapa galvanizada 2mm">
+                </div>
+                <div class="form-group">
+                    <label>Cantidad <span class="required">*</span></label>
+                    <input type="number" name="itemCantidad[]" required min="0.01" step="0.01" class="item-cantidad" placeholder="1">
+                </div>
+                <div class="form-group">
+                    <label>Unidad <span class="required">*</span></label>
+                    <select name="itemUnidad[]" required>
+                        <option value="">Seleccionar</option>
+                        <option value="UN">Unidades</option>
+                        <option value="KG">Kilogramos</option>
+                        <option value="M">Metros</option>
+                        <option value="M2">Metros²</option>
+                        <option value="M3">Metros³</option>
+                        <option value="LT">Litros</option>
+                        <option value="HR">Horas</option>
+                        <option value="SERV">Servicio</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Precio Unit. ($) <span class="required">*</span></label>
+                    <input type="number" name="itemPrecio[]" required min="0" step="0.01" class="item-precio" placeholder="0.00">
+                </div>
+                <button type="button" class="btn-remove">✕</button>
+            `;
+            
+            div.querySelector('.btn-remove').addEventListener('click', function() {
+                if (document.querySelectorAll('.item-row').length > 1) {
+                    div.remove();
+                    calcularTotales();
+                } else {
+                    alert('Debe haber al menos un item');
+                }
+            });
+            
+            div.querySelector('.item-cantidad').addEventListener('input', calcularTotales);
+            div.querySelector('.item-precio').addEventListener('input', calcularTotales);
+            
+            return div;
+        }
+
+        function calcularTotales() {
+            let subtotal = 0;
+            document.querySelectorAll('.item-row').forEach(row => {
+                const cantidad = parseFloat(row.querySelector('.item-cantidad').value) || 0;
+                const precio = parseFloat(row.querySelector('.item-precio').value) || 0;
+                subtotal += cantidad * precio;
+            });
+
+            const iva = subtotal * 0.21;
+            const total = subtotal + iva;
+
+            document.getElementById('subtotal').textContent = '$' + subtotal.toFixed(2);
+            document.getElementById('iva').textContent = '$' + iva.toFixed(2);
+            document.getElementById('total').textContent = '$' + total.toFixed(2);
+        }
+
+        async function cargarHistorial() {
+            const historialContent = document.getElementById('historialContent');
+            const historialCount = document.getElementById('historialCount');
+            
+            historialContent.innerHTML = '<div class="historial-loading">Cargando...</div>';
+
+            try {
+                const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=getAll`);
+                const data = await response.json();
+                
+                if (data.ordenes && data.ordenes.length > 0) {
+                    const ordenes = data.ordenes.sort((a, b) => b.nroOC.localeCompare(a.nroOC));
+                    const ultimaOC = ordenes[0].nroOC;
+                    const match = ultimaOC.match(/OC-\d+-(\d+)/);
+                    if (match) ultimoNumeroOC = parseInt(match[1]);
+                    
+                    document.getElementById('nroOC').value = generarNumeroOC();
+                    historialCount.textContent = ordenes.length;
+
+                    let html = '<div class="historial-list">';
+                    ordenes.forEach(orden => {
+                        const fecha = new Date(orden.fechaEmision).toLocaleDateString('es-AR');
+                        html += `
+                            <div class="historial-item" onclick='verDetalleOC(${JSON.stringify(orden).replace(/'/g, "&apos;")})'>
+                                <div class="historial-item-header">
+                                    <div class="historial-oc-number">${orden.nroOC}</div>
+                                    <div class="historial-date">${fecha}</div>
+                                </div>
+                                <div class="historial-proveedor">${orden.proveedorNombre}</div>
+                                <div class="historial-ot">📋 OT: ${orden.nroOT}</div>
+                                ${orden.total ? `<div class="historial-total">${orden.total}</div>` : ''}
+                            </div>`;
+                    });
+                    html += '</div>';
+                    historialContent.innerHTML = html;
+                } else {
+                    historialCount.textContent = '0';
+                    historialContent.innerHTML = '<div class="historial-empty">No hay órdenes aún</div>';
+                    document.getElementById('nroOC').value = generarNumeroOC();
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                historialContent.innerHTML = '<div class="historial-empty">Error al cargar</div>';
+                document.getElementById('nroOC').value = generarNumeroOC();
+            }
+        }
+
+        function verDetalleOC(orden) {
+            let items = [];
+            try { items = JSON.parse(orden.itemsJSON || '[]'); } catch (e) {}
+            const detalles = `━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ORDEN DE COMPRA - DETALLE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📋 N° OC: ${orden.nroOC}
+📅 Fecha: ${orden.fechaEmision}
+🔧 N° OT: ${orden.nroOT}
+${orden.fechaEntrega ? `📦 Entrega: ${orden.fechaEntrega}` : ''}
+${orden.cliente ? `👤 Cliente: ${orden.cliente}` : ''}
+
+PROVEEDOR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${orden.proveedorNombre}
+
+ITEMS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${items.map((item, i) => `${i+1}. ${item.descripcion}
+   ${item.cantidad} ${item.unidad} × $${item.precio} = $${item.subtotal}`).join('\n\n')}
+
+TOTALES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Subtotal: ${orden.subtotal}
+IVA (21%): ${orden.iva}
+TOTAL: ${orden.total}
+
+${orden.condicionesPago ? `💳 Pago: ${orden.condicionesPago}` : ''}
+${orden.lugarEntrega ? `📍 Entrega: ${orden.lugarEntrega}` : ''}
+${orden.observaciones ? `\n📝 Observaciones:\n${orden.observaciones}` : ''}`;
+            alert(detalles);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Inicializando formulario...');
+            document.getElementById('fechaEmision').value = new Date().toISOString().split('T')[0];
+            document.getElementById('itemsContainer').appendChild(crearItemRow());
+            cargarHistorial();
+            document.getElementById('btnAgregarItem').addEventListener('click', function() {
+                document.getElementById('itemsContainer').appendChild(crearItemRow());
+            });
+            document.getElementById('btnActualizar').addEventListener('click', cargarHistorial);
+            console.log('✅ Formulario inicializado');
+        });
+
+        document.getElementById('ordenCompraForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            console.log('📤 Enviando formulario...');
+            
+            const formData = new FormData(this);
+            const data = {};
+            
+            for (let [key, value] of formData.entries()) {
+                if (!key.includes('[]')) data[key] = value;
+            }
+            
+            const descripciones = formData.getAll('itemDescripcion[]');
+            const cantidades = formData.getAll('itemCantidad[]');
+            const unidades = formData.getAll('itemUnidad[]');
+            const precios = formData.getAll('itemPrecio[]');
+            
+            data.items = descripciones.map((desc, i) => ({
+                descripcion: desc,
+                cantidad: cantidades[i],
+                unidad: unidades[i],
+                precio: precios[i],
+                subtotal: (parseFloat(cantidades[i]) * parseFloat(precios[i])).toFixed(2)
+            }));
+
+            data.subtotal = document.getElementById('subtotal').textContent;
+            data.iva = document.getElementById('iva').textContent;
+            data.total = document.getElementById('total').textContent;
+
+            const submitBtn = this.querySelector('.submit-btn');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Enviando...';
+            submitBtn.disabled = true;
+
+            try {
+                await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(data)
+                });
+
+                console.log('✅ Orden enviada');
+                const successMsg = document.getElementById('successMessage');
+                successMsg.style.display = 'block';
+                
+                setTimeout(() => cargarHistorial(), 1000);
+                setTimeout(() => {
+                    this.reset();
+                    document.getElementById('fechaEmision').value = new Date().toISOString().split('T')[0];
+                    document.getElementById('itemsContainer').innerHTML = '';
+                    document.getElementById('itemsContainer').appendChild(crearItemRow());
+                    calcularTotales();
+                    successMsg.style.display = 'none';
+                }, 2000);
+                
+            } catch (error) {
+                console.error('❌ Error:', error);
+                alert('Error al guardar');
+            } finally {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
